@@ -1,0 +1,48 @@
+name: Flutter Build APK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. جلب الكود من المستودع (تحديث لـ v4)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. إعداد البيئة لتشغيل جافا (تحديث لـ v4)
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # 3. إعداد بيئة Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.0' # يمكنك تغيير النسخة حسب حاجتك
+          channel: 'stable'
+          cache: true # تفعيل الكاش لتسريع البناء في المرات القادمة
+
+      # 4. تحميل المكتبات الاعتمادية
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 5. بناء نسخة الـ APK
+      - name: Build APK
+        run: flutter build apk --release
+
+      # 6. رفع ملف الـ APK الناتج كـ Artifact (تحديث لـ v4)
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/*.apk
