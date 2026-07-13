@@ -17,7 +17,7 @@ dependencies:
   printing: ^5.11.1
   share_plus: ^7.2.1
   file_picker: ^6.1.1
-  intl: ^0.18.1
+  intl: ^0.18.0 # تم التعديل هنا لتجنب خطأ الـ Conflict
 
 dev_dependencies:
   flutter_test:
